@@ -11,7 +11,7 @@ Recipe path: recipes/cases/2026fa/nikam0420-analyst-opt-triage.md
 Prototype command: python3 scripts/contrib/2026fa/nikam0420-analyst-opt-triage/prototype.py
 GitHub repository: https://github.com/nikam0420/the-reallocation-engine (create/confirm your fork)
 Branch: contrib/2026fa-nikam0420-analyst-opt-triage
-PR URL: REPLACE_WITH_ACTUAL_PR_URL
+PR URL: https://github.com/nikbearbrown/the-reallocation-engine/pull/8
 Submitted commit SHA: See COMMIT-SHA.txt at ZIP root, generated from the exact git archive source commit; PR head must equal that SHA.
 Lifecycle stage claimed: RUNNABLE-SAMPLE (offline machine execution; human adequacy/real-use approval pending)
 Summary of my changes: Python adapter, fictional scenario fixtures, nine offline tests, recipe/card, evidence-labeled dual outputs, domain justification, actual assistant run reports, disclosure and presentation outline.
