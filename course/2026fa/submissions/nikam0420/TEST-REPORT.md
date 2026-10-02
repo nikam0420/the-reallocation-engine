@@ -622,3 +622,142 @@ BLOCKED: company-missing: exact name not found
 Exit code: 2 (expected 2)
 
 ```
+
+## Personal clean-checkout verification
+
+```text
+$ npm run doctor
+
+> the-reallocation-engine@1.0.0 doctor
+> node scripts/doctor.mjs
+
+RECIPE DOCTOR — The Reallocation Engine
+==========================================
+
+ENVIRONMENT (required)
+  ✓ node       v23.3.0
+  ✓ python3    Python 3.12.2
+
+ENVIRONMENT (optional — features degrade without these)
+  ✓ pandoc     pandoc 3.5
+  — libreoffice not found (PDF fallback)
+  — playwright not installed (ats:liveness needs it)
+
+RUNNABLE COMMANDS (npm script → target file present?)
+  ✓ verify         scripts/conformance.mjs
+  ✓ manifest-check scripts/manifest-check.mjs
+  ✓ eval:score     scripts/eval/score-run.mjs
+  ✓ eval:report    scripts/eval/report.mjs
+  ✓ doctor         scripts/doctor.mjs
+  ✓ bls:local-wage scripts/bls/local-wage-adjustment.py
+  ✓ build-instructions scripts/build-instructions.mjs
+  ✓ to-markdown    scripts/to-markdown.mjs
+  ✓ score          scripts/score/role-scorer.mjs
+  ✓ score:gates    scripts/score/gate-harness.mjs
+  ✓ ats:dedup      scripts/ats/dedup-tracker.mjs
+  ✓ ats:liveness   scripts/ats/check-liveness.mjs
+  ✓ ats:merge      scripts/ats/merge-tracker.mjs
+  ✓ ats:normalize  scripts/ats/normalize-statuses.mjs
+  ✓ ats:scan       scripts/ats/scan.mjs
+  ✓ ats:verify     scripts/ats/verify-pipeline.mjs
+  ✓ resumes:pdf    scripts/resumes/generate-pdf.mjs
+  ✓ svg-to-png     scripts/svg-to-png.mjs
+  ✓ audit:layout   scripts/svg-layout-audit.mjs
+  ✓ postsvg-to-png scripts/svg-layout-audit.mjs
+  ✓ skill-demand   scripts/score/skill-demand-monitor.mjs
+  ✓ skill-demand:test scripts/score/skill-demand-monitor.test.mjs
+  ✓ fetch-postings scripts/ats/fetch-real-postings.py
+  ✓ pii-scan       scripts/pii-scan.mjs
+
+DOMAIN DIRECTORIES
+  ✓ data/sec
+  ✓ data/bls
+  ✓ data/ats
+  ✓ data/80-days-to-stay
+  ✓ scripts/sec
+  ✓ scripts/bls
+  ✓ scripts/ats
+  ✓ scripts/resumes
+
+PRIVACY (no personal data committed)
+  ✓ no private/PII paths are tracked
+
+RECIPES (33)
+  with lifecycle frontmatter: 33   missing: 0
+  by status: DRAFT 28 · RUNNABLE-SAMPLE 4 · RUNNABLE-LIVE  # DRAFT | SPECIFIED | RUNNABLE-SAMPLE | RUNNABLE-LIVE | VERIFIED 1
+  open TODOs: 318 declared (in frontmatter) · 318 [TODO markers in bodies
+
+SUMMARY
+  environment: ✓ runnable
+  recipes: 33/33 carry lifecycle frontmatter — all tracked
+  next: continue
+
+Exit code: 0
+```
+
+```text
+$ npm run verify
+
+> the-reallocation-engine@1.0.0 verify
+> node scripts/conformance.mjs && node scripts/manifest-check.mjs
+
+conformance: 166 files (88 md · 38 py · 30 js · 5 sh · 5 json)
+✓ all conform (machine half of P4). Adequacy is still the human gate.
+MANIFEST CHECK — The Reallocation Engine
+==========================================
+
+WARN (3):
+  W1 ignore path not in .gitignore: archive/
+  W2 private path not gitignored (PII/secret risk): private/
+  W2 private path not gitignored (PII/secret risk): data/ats/
+
+✓ manifest check passed (3 warnings)
+
+Exit code: 0
+```
+
+```text
+$ python3 scripts/contrib/2026fa/nikam0420-analyst-opt-triage/prototype.py
+✓ scored 3 roles → Apply 0 · Consider 1 · Skip 2 (skip 67%)
+  course/2026fa/submissions/nikam0420/runs/role-scores.json  +  course/2026fa/submissions/nikam0420/runs/role-scores.md
+Sample-only; current liveness NOT verified; human gate PENDING.
+enough-time: Consider composite=0.56 days_left=44
+closed-posting: Skip composite=0 days_left=44
+too-little-time: Skip composite=0 days_left=8
+Outputs: course/2026fa/submissions/nikam0420/runs/agent-log.json + human-report.md
+
+Exit code: 0
+```
+
+```text
+$ python3 scripts/contrib/2026fa/nikam0420-analyst-opt-triage/test_prototype.py
+✓ scored 3 roles → Apply 0 · Consider 1 · Skip 2 (skip 67%)
+  course/2026fa/submissions/nikam0420/runs/tmpb1hzdmah/role-scores.json  +  course/2026fa/submissions/nikam0420/runs/tmpb1hzdmah/role-scores.md
+Sample-only; current liveness NOT verified; human gate PENDING.
+enough-time: Consider composite=0.56 days_left=44
+closed-posting: Skip composite=0 days_left=44
+too-little-time: Skip composite=0 days_left=8
+Outputs: course/2026fa/submissions/nikam0420/runs/tmpb1hzdmah/agent-log.json + human-report.md
+test_bad_date (__main__.TestAdapter.test_bad_date) ... ok
+test_duplicate_company (__main__.TestAdapter.test_duplicate_company) ... ok
+test_existing_scorer_gates_and_labels (__main__.TestAdapter.test_existing_scorer_gates_and_labels) ... ok
+test_invalid_lag (__main__.TestAdapter.test_invalid_lag) ... ok
+test_missing_approval_not_zero (__main__.TestAdapter.test_missing_approval_not_zero) ... ok
+test_missing_company (__main__.TestAdapter.test_missing_company) ... ok
+test_missing_liveness (__main__.TestAdapter.test_missing_liveness) ... ok
+test_output_path_guard (__main__.TestAdapter.test_output_path_guard) ... ok
+test_past_deadline (__main__.TestAdapter.test_past_deadline) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.131s
+
+OK
+
+Exit code: 0
+```
+
+```text
+$ git status --porcelain
+
+Exit code: 0
+```
